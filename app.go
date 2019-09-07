@@ -2,36 +2,71 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 
-	"gopkg.in/yaml.v2"
+	lib "github.com/thenets/process-manager/lib"
+	"github.com/urfave/cli"
 )
 
-// ConfigData configs from YAML file
-type ConfigData struct {
-    Name string `yaml:"name"`
-    CMD []string `yaml:"cmd"`
-	CPU  struct {
-		Limit int `yaml:"limit"`
-	}
-	Linux struct {
-		User string `yaml:"user"`
-	}
-}
+// Main variables
+var version = "0.0.1-alpha"
 
 func main() {
-	myConfigData, err := ioutil.ReadFile("./samples/sleep.yaml")
-	if err != nil {
-        log.Fatalf("error: %v", err)
-    }
-	fmt.Print(string(myConfigData))
-
-	t := ConfigData{}
-
-	err = yaml.Unmarshal([]byte(myConfigData), &t)
-	if err != nil {
-		log.Fatalf("error: %v", err)
+	app := cli.NewApp()
+	app.Name = "pm-zero"
+	app.Usage = "The easiest and fastest way to manage processes."
+	app.Commands = []cli.Command{
+		{
+			Name:    "add",
+			Aliases: []string{"a"},
+			Usage:   "add a task to the list",
+			Action: func(c *cli.Context) error {
+				fmt.Println("added task: ", c.Args().First())
+				return nil
+			},
+		},
+		{
+			Name:    "complete",
+			Aliases: []string{"c"},
+			Usage:   "complete a task on the list",
+			Action: func(c *cli.Context) error {
+				fmt.Println("completed task: ", c.Args().First())
+				return nil
+			},
+		},
+		{
+			Name:    "template",
+			Aliases: []string{"t"},
+			Usage:   "options for task templates",
+			Subcommands: []cli.Command{
+				{
+					Name:  "add",
+					Usage: "add a new template",
+					Action: func(c *cli.Context) error {
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:  "remove",
+					Usage: "remove an existing template",
+					Action: func(c *cli.Context) error {
+						fmt.Println("removed task template: ", c.Args().First())
+						return nil
+					},
+				},
+			},
+		},
 	}
-	fmt.Printf("--- t:\n%v\n\n", t)
+
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var configFilePath = "./samples/sleep.yaml"
+	var configData = lib.ReadConfigFile(configFilePath)
+
+	fmt.Println("%v", configData)
 }
