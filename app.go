@@ -9,29 +9,49 @@ import (
 	"github.com/urfave/cli"
 )
 
-// Main variables
-var version = "0.0.1-alpha"
-
 func main() {
+	// Special condition for "start" command
+	// cause it can conflit with the command args.
+	if os.Args[1] == "start" {
+		lib.CreateProcess(os.Args[2], os.Args[3:])
+		os.Exit(0)
+	}
+
+	// CLI
 	app := cli.NewApp()
-	app.Name = "pm-zero"
+	app.Name = "pmzero"
 	app.Usage = "The easiest and fastest way to manage processes."
+	app.Version = "0.0.1-alpha"
 	app.Commands = []cli.Command{
 		{
-			Name:    "add",
-			Aliases: []string{"a"},
-			Usage:   "add a task to the list",
+			Name:    "load",
+			Aliases: []string{"l"},
+			Usage:   "load a config file.",
 			Action: func(c *cli.Context) error {
-				fmt.Println("added task: ", c.Args().First())
+				if len(c.Args().First()) == 0 {
+					log.Fatalf("[ERROR] Required the config file path.\nExample: %v load <configFilePath>\n", app.Name)
+				}
+
+				var configData = lib.ReadConfigFile(c.Args().First())
+				fmt.Printf("%#v\n", configData)
+
 				return nil
 			},
 		},
 		{
-			Name:    "complete",
+			Name:    "start",
 			Aliases: []string{"c"},
-			Usage:   "complete a task on the list",
+			Usage:   "start a process.",
 			Action: func(c *cli.Context) error {
-				fmt.Println("completed task: ", c.Args().First())
+				return nil
+			},
+		},
+		{
+			Name:    "print",
+			Aliases: []string{"c"},
+			Usage:   "DEBUG prints the args.",
+			Action: func(c *cli.Context) error {
+				fmt.Println(c.Args()[1:])
 				return nil
 			},
 		},
@@ -65,8 +85,4 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var configFilePath = "./samples/sleep.yaml"
-	var configData = lib.ReadConfigFile(configFilePath)
-
-	fmt.Println("%v", configData)
 }

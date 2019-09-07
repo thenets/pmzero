@@ -24,7 +24,7 @@ func ReadConfigFile(filePath string) ConfigData {
 	// Read config file content
 	configFileContent, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("[ERROR] Config file can't be read: %v\n%v", filePath, err)
+		log.Fatalf("[ERROR] Config file can't be read: ./%v\n%v", filePath, err)
 	}
 
 	// Create config object
