@@ -1,0 +1,6 @@
+name: "backup"
+cmd: ["sleep", "60"]
+cpu:
+    limit: 50
+linux:
+    user: root
