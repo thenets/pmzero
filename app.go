@@ -5,22 +5,24 @@ import (
 	"log"
 	"os"
 
-	lib "github.com/thenets/process-manager/lib"
+	lib "github.com/thenets/pmzero/lib"
 	"github.com/urfave/cli"
 )
 
 func main() {
 	// Special condition for "start" command
 	// cause it can conflit with the command args.
-	if os.Args[1] == "start" {
-		lib.CreateProcess(os.Args[2], os.Args[3:])
-		os.Exit(0)
+	if len(os.Args) > 1 {
+		if os.Args[1] == "start" {
+			lib.CreateProcess(os.Args[2], os.Args[3:])
+			os.Exit(0)
+		}
 	}
 
 	// CLI
 	app := cli.NewApp()
 	app.Name = "pmzero"
-	app.Usage = "The easiest and fastest way to manage processes."
+	app.Usage = "Windows and Linux process manager."
 	app.Version = "0.0.1-alpha"
 	app.Commands = []cli.Command{
 		{
