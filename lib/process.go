@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"time"
 
+	a "github.com/logrusorgru/aurora"
 	proc "github.com/shirou/gopsutil/process"
 )
 
@@ -18,7 +19,7 @@ func CreateProcess(commandName string, args []string) int {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Just ran subprocess %d.\n", cmd.Process.Pid)
+	log.Printf("Just ran subprocess %d.\n", a.Cyan(cmd.Process.Pid))
 
 	time.Sleep(5 * time.Second)
 
