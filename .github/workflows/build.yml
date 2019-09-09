@@ -1,12 +1,13 @@
 name: Go
-on: 
-  push:
-    paths:
-      - '*.go'
-    branches:
-      - master
-    tags:        
-      - v*
+# on: 
+#   push:
+#     paths:
+#       - '*.go'
+#     branches:
+#       - master
+#     tags:        
+#       - v*
+on: [push]
 
 jobs:
   build:
