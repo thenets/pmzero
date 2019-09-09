@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"time"
 
 	a "github.com/logrusorgru/aurora"
 	proc "github.com/shirou/gopsutil/process"
@@ -21,16 +20,14 @@ func CreateProcess(commandName string, args []string) int {
 	}
 	log.Printf("Just ran subprocess %d.\n", a.Cyan(cmd.Process.Pid))
 
-	time.Sleep(5 * time.Second)
-
 	p, err := proc.NewProcess(int32(cmd.Process.Pid))
 	if err != nil {
 		log.Fatalf("[ERROR] Trying to get the process PID.\n%v", err)
 	}
-	p.Kill()
+	// p.Kill()
 	fmt.Println(p)
 
-	return 0
+	return int(cmd.Process.Pid)
 }
 
 // SimpleCommandInvoker and add it to a pull

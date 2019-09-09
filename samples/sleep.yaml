@@ -1,4 +1,5 @@
-name: "backup"
+type: deployment
+name: backup
 cmd: ["sleep", "60"]
 cpu:
     limit: 50

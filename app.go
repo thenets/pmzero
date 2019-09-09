@@ -12,12 +12,12 @@ import (
 func main() {
 	// Special condition for "start" command
 	// cause it can conflit with the command args.
-	if len(os.Args) > 1 {
-		if os.Args[1] == "start" {
-			lib.CreateProcess(os.Args[2], os.Args[3:])
-			os.Exit(0)
-		}
-	}
+	// if len(os.Args) > 1 {
+	// 	if os.Args[1] == "start" {
+	// 		lib.CreateProcess(os.Args[2], os.Args[3:])
+	// 		os.Exit(0)
+	// 	}
+	// }
 
 	// CLI
 	app := cli.NewApp()
@@ -34,8 +34,13 @@ func main() {
 					log.Fatalf("[ERROR] Required the config file path.\nExample: %v load <configFilePath>\n", app.Name)
 				}
 
-				var configData = lib.ReadConfigFile(c.Args().First())
-				fmt.Printf("%#v\n", configData)
+				// Load deployment file if it's a deployment type
+				var data = lib.ReadDeploymentFile(c.Args().First())
+				if data.Type == "deployment" {
+					lib.LoadDeploymentFile(c.Args().First())
+				} else {
+					log.Fatalf("[ERROR] Config file type not supported: %v\n", data.Type)
+				}
 
 				return nil
 			},
@@ -45,6 +50,18 @@ func main() {
 			Aliases: []string{"c"},
 			Usage:   "start a process.",
 			Action: func(c *cli.Context) error {
+				if lib.HasDeployment(c.Args().First()) {
+					lib.StartDeployment(c.Args().First())
+				} else {
+					// TODO raise error
+				}
+				return nil
+			},
+		},
+		{
+			Name:  "stop",
+			Usage: "stop a process.",
+			Action: func(c *cli.Context) error {
 				return nil
 			},
 		},
@@ -53,7 +70,9 @@ func main() {
 			Aliases: []string{"c"},
 			Usage:   "DEBUG prints the args.",
 			Action: func(c *cli.Context) error {
-				fmt.Println(c.Args()[1:])
+				if len(c.Args()) > 0 {
+					fmt.Println(c.Args()[1:])
+				}
 				return nil
 			},
 		},

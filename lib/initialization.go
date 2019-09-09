@@ -1,28 +1,53 @@
 package lib
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/shirou/gopsutil/host"
-	"gopkg.in/ini.v1"
+	"log"
+	"path/filepath"
+	"strings"
 )
 
-func init() {
-	fmt.Println(host.BootTime())
+// https://ini.unknwon.io/docs/intro/getting_started
 
-	cfg, err := ini.Load("cache/data.ini")
+func init() {
+	CheckBootTime()
+	updateDeploymentsState()
+}
+
+func updateDeploymentsState() {
+	var state = GetState()
+
+	files, err := filepath.Glob(configDirPath + "*")
 	if err != nil {
-		fmt.Printf("Fail to read file: %v", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
-    // Classic read of values, default section can be represented as empty string
-    fmt.Println("App Mode:", cfg.Section("").Key("app_mode").String())
-    fmt.Println("Data Path:", cfg.Section("paths").Key("data").String())
+	var deploymentNames []string
 
-	// Now, make some changes and save it
-	cfg.Section("").Key("app_mode").SetValue("production")
-	cfg.SaveTo("cache/data.ini")
+	var deploymentPrefix = configDirPath + "deployment_"
+
+	for _, f := range files {
+		f = strings.ReplaceAll(f, "\\", "/")
+		if strings.Contains(f, deploymentPrefix) {
+			f = strings.ReplaceAll(f, deploymentPrefix, "")
+			deploymentName := strings.Split(f, ".")[0]
+
+			// Check if deploymentName exist in state file
+			var tmp = state.Section("deployments").Key(deploymentName).String()
+			if len(tmp) == 0 || tmp == "false" {
+				state.Section("deployments").Key(deploymentName).SetValue("true")
+			}
+
+			deploymentNames = append(deploymentNames, deploymentName)
+		}
+	}
+
+	var keys = state.Section("deployments").Keys()
+	for _, f := range keys {
+		if !StringInSlice(f.Name(), deploymentNames) {
+			state.Section("deployments").Key(f.Name()).SetValue("false")
+		}
+	}
+
+	state.SaveTo(stateFilePath)
 
 }
