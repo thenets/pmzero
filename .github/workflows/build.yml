@@ -34,16 +34,16 @@ jobs:
     - name: Build
       run: go build -v .
       
-    - name: Upload builded artifact
+    - name: Upload binary <linux & macOS>
       uses: actions/upload-artifact@master
       with:
         name: pmzero
-        path: .pmzero
+        path: ./pmzero
       if: matrix.os != 'windows-latest'
       
-    - name: Upload builded artifact
+    - name: Upload binary <windows>
       uses: actions/upload-artifact@master
       with:
         name: pmzero.exe
-        path: .pmzero.exe
+        path: ./pmzero.exe
       if: matrix.os == 'windows-latest'
