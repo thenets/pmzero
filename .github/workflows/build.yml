@@ -36,7 +36,7 @@ jobs:
       with:
         name: pmzero-linux-x86_64
         path: ./pmzero
-      if: matrix.os == 'linux-latest'
+      if: matrix.os == 'ubuntu-latest'
 
     - name: Upload binary <macOS>
       uses: actions/upload-artifact@master
