@@ -46,7 +46,7 @@ func deleteProcesses() {
 func GetState() *ini.File {
 	// Create cache/ dir if not exist
 	if _, err := os.Stat(configDirPath); os.IsNotExist(err) {
-		os.Mkdir(configDirPath, os.ModeDir)
+		os.Mkdir(configDirPath, os.ModePerm)
 	}
 
 	// Create state.ini if not exist
@@ -65,6 +65,7 @@ func GetState() *ini.File {
 		log.Fatalf("[ERROR] Fail to read file: %v\n", err)
 		os.Exit(1)
 	}
+	cfg.Section("").Key("boot_time").SetValue("0")
 
 	return cfg
 }
