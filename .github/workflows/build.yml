@@ -39,11 +39,11 @@ jobs:
       with:
         name: pmzero
         path: .pmzero
-      if: ${{ matrix.os }} != "windows-latest"
+      if: ${{ matrix.os != "windows-latest" }}
       
     - name: Upload builded artifact
       uses: actions/upload-artifact@master
       with:
         name: pmzero.exe
         path: .pmzero.exe
-      if: ${{ matrix.os }} == "windows-latest"
+      if: ${{ matrix.os == "windows-latest" }}
