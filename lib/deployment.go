@@ -89,9 +89,7 @@ func AddDeploymentFile(filePath string) error {
 
 	// Copy deployment file to config dir
 	CopyFile(filePath, newDeploymentFilePath)
-
-	StartDeployment(d.Name)
-
+	
 	return nil
 }
 
