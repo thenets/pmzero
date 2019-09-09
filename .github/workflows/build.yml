@@ -16,6 +16,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
+    env:
+      current_os: ${{ matrix.os }}
 
     steps:
     - name: Set up Go 1.13
@@ -39,11 +41,11 @@ jobs:
       with:
         name: pmzero
         path: .pmzero
-      if: ${{ matrix.os != "windows-latest" }}
+      if: ${{ $current_os != "windows-latest" }}
       
     - name: Upload builded artifact
       uses: actions/upload-artifact@master
       with:
         name: pmzero.exe
         path: .pmzero.exe
-      if: ${{ matrix.os == "windows-latest" }}
+      if: ${{ $current_os == "windows-latest" }}
