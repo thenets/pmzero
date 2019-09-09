@@ -2,16 +2,19 @@ package lib
 
 import (
 	"log"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 
+	"github.com/shirou/gopsutil/host"
 	proc "github.com/shirou/gopsutil/process"
 )
 
 // https://ini.unknwon.io/docs/intro/getting_started
 
 func init() {
+	createConfigDir()
 	UpdateState()
 }
 
@@ -20,6 +23,32 @@ func UpdateState() {
 	CheckBootTime()
 	updateDeploymentsState()
 	updateProcessState()
+}
+
+func createConfigDir() {
+	// Create cache/ dir if not exist
+	if _, err := os.Stat(configDirPath); os.IsNotExist(err) {
+		os.Mkdir(configDirPath, os.ModePerm)
+	}
+
+	// Create state.ini if not exist
+	if _, err := os.Stat(stateFilePath); os.IsNotExist(err) {
+		emptyFile, err := os.Create(stateFilePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		emptyFile.Close()
+
+		// Save current boot time
+		bootTime, err := host.BootTime()
+		if err != nil {
+			log.Fatalf("[ERROR] Erro during get the host's boot time.\n%v", err)
+		}
+		var state = GetState()
+		state.Section("").Key("boot_time").SetValue(strconv.Itoa(int(bootTime)))
+		state.SaveTo(stateFilePath)
+	}
+
 }
 
 func updateDeploymentsState() {

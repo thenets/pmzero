@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"strconv"
 
@@ -185,4 +186,20 @@ func DeleteDeployment(deploymentName string) error {
 		log.Fatalln(err)
 	}
 	return nil
+}
+
+// ForegroundDeployments keep running and respawn all deployments
+func ForegroundDeployments() {
+	for {
+		time.Sleep(2 * time.Second)
+		UpdateState()
+
+		var deployments = GetDeployments()
+		for _, d := range deployments {
+			if d.PID == -1 {
+				log.Printf("[%s] is down. Restarting...", d.Name)
+				StartDeployment(d.Name)
+			}
+		}
+	}
 }

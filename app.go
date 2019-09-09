@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -30,7 +31,7 @@ func main() {
 		{
 			Name:    "load",
 			Aliases: []string{"l"},
-			Usage:   "load a config file.",
+			Usage:   "load a config file",
 			Action: func(c *cli.Context) error {
 				if len(c.Args().First()) == 0 {
 					log.Fatalf("[ERROR] Required the config file path.\nExample: %v load <configFilePath>\n", app.Name)
@@ -50,7 +51,7 @@ func main() {
 		{
 			Name:    "start",
 			Aliases: []string{"c"},
-			Usage:   "start a deployment.",
+			Usage:   "start a deployment",
 			Action: func(c *cli.Context) error {
 				if len(c.Args().First()) == 0 {
 					log.Fatalf("[ERROR] require a deployment name.\nExample: %v stop <deploymentName>\n", app.Name)
@@ -65,7 +66,7 @@ func main() {
 		},
 		{
 			Name:  "list",
-			Usage: "list all deployments.",
+			Usage: "list all deployments",
 			Action: func(c *cli.Context) error {
 				listDeployments()
 
@@ -74,7 +75,7 @@ func main() {
 		},
 		{
 			Name:  "delete",
-			Usage: "delete a deployment.",
+			Usage: "delete a deployment",
 			Action: func(c *cli.Context) error {
 				if len(c.Args().First()) == 0 {
 					log.Fatalf("[ERROR] require a deployment name.\nExample: %v delete <deploymentName>\n", app.Name)
@@ -91,7 +92,7 @@ func main() {
 		},
 		{
 			Name:  "stop",
-			Usage: "stop a deployment.",
+			Usage: "stop a deployment",
 			Action: func(c *cli.Context) error {
 				if len(c.Args().First()) == 0 {
 					log.Fatalf("[ERROR] require a deployment name.\nExample: %v stop <deploymentName>\n", app.Name)
@@ -101,6 +102,16 @@ func main() {
 				} else {
 					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
 				}
+
+				return nil
+			},
+		},
+		{
+			Name:  "foreground",
+			Usage: "keep running and respawn all deployments",
+			Action: func(c *cli.Context) error {
+				fmt.Printf("Press Ctrl+C to end\n")
+				lib.ForegroundDeployments()
 
 				return nil
 			},
