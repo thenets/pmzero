@@ -1,6 +1,6 @@
 type: deployment
-name: backup
-cmd: ["sleep", "60"]
+name: test
+cmd: ["test", "asgard"]
 cpu:
     limit: 50
 linux:

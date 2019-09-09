@@ -1,20 +1,22 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	lib "github.com/thenets/pmzero/lib"
 	"github.com/urfave/cli"
 )
 
 func main() {
-	// Special condition for "start" command
+	// Special condition for "run" command
 	// cause it can conflit with the command args.
 	// if len(os.Args) > 1 {
-	// 	if os.Args[1] == "start" {
-	// 		lib.CreateProcess(os.Args[2], os.Args[3:])
+	// 	if os.Args[1] == "run" {
+	// 		lib.createProcess(os.Args[2], os.Args[3:])
 	// 		os.Exit(0)
 	// 	}
 	// }
@@ -35,11 +37,11 @@ func main() {
 				}
 
 				// Load deployment file if it's a deployment type
-				var data = lib.ReadDeploymentFile(c.Args().First())
+				var data = lib.GetDeploymentByFilePath(c.Args().First())
 				if data.Type == "deployment" {
-					lib.LoadDeploymentFile(c.Args().First())
+					lib.AddDeploymentFile(c.Args().First())
 				} else {
-					log.Fatalf("[ERROR] Config file type not supported: %v\n", data.Type)
+					log.Fatalf("[ERROR] config file type not supported: %v\n", data.Type)
 				}
 
 				return nil
@@ -48,55 +50,59 @@ func main() {
 		{
 			Name:    "start",
 			Aliases: []string{"c"},
-			Usage:   "start a process.",
+			Usage:   "start a deployment.",
 			Action: func(c *cli.Context) error {
+				if len(c.Args().First()) == 0 {
+					log.Fatalf("[ERROR] require a deployment name.\nExample: %v stop <deploymentName>\n", app.Name)
+				}
 				if lib.HasDeployment(c.Args().First()) {
 					lib.StartDeployment(c.Args().First())
 				} else {
-					// TODO raise error
+					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
 				}
+				return nil
+			},
+		},
+		{
+			Name:  "list",
+			Usage: "list all deployments.",
+			Action: func(c *cli.Context) error {
+				listDeployments()
+
+				return nil
+			},
+		},
+		{
+			Name:  "delete",
+			Usage: "delete a deployment.",
+			Action: func(c *cli.Context) error {
+				if len(c.Args().First()) == 0 {
+					log.Fatalf("[ERROR] require a deployment name.\nExample: %v delete <deploymentName>\n", app.Name)
+				}
+				if lib.HasDeployment(c.Args().First()) {
+					lib.StopDeployment(c.Args().First())
+				} else {
+					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
+				}
+
+				lib.DeleteDeployment(c.Args().First())
 				return nil
 			},
 		},
 		{
 			Name:  "stop",
-			Usage: "stop a process.",
+			Usage: "stop a deployment.",
 			Action: func(c *cli.Context) error {
-				return nil
-			},
-		},
-		{
-			Name:    "print",
-			Aliases: []string{"c"},
-			Usage:   "DEBUG prints the args.",
-			Action: func(c *cli.Context) error {
-				if len(c.Args()) > 0 {
-					fmt.Println(c.Args()[1:])
+				if len(c.Args().First()) == 0 {
+					log.Fatalf("[ERROR] require a deployment name.\nExample: %v stop <deploymentName>\n", app.Name)
 				}
+				if lib.HasDeployment(c.Args().First()) {
+					lib.StopDeployment(c.Args().First())
+				} else {
+					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
+				}
+
 				return nil
-			},
-		},
-		{
-			Name:    "template",
-			Aliases: []string{"t"},
-			Usage:   "options for task templates",
-			Subcommands: []cli.Command{
-				{
-					Name:  "add",
-					Usage: "add a new template",
-					Action: func(c *cli.Context) error {
-						fmt.Println("new task template: ", c.Args().First())
-						return nil
-					},
-				},
-				{
-					Name:  "remove",
-					Usage: "remove an existing template",
-					Action: func(c *cli.Context) error {
-						fmt.Println("removed task template: ", c.Args().First())
-						return nil
-					},
-				},
 			},
 		},
 	}
@@ -106,4 +112,23 @@ func main() {
 		log.Fatal(err)
 	}
 
+}
+
+func listDeployments() {
+	data := [][]string{}
+
+	var deployments = lib.GetDeployments()
+
+	for _, d := range deployments {
+		data = append(data, []string{d.Name, d.Status, strconv.Itoa(d.PID), strings.Join(d.CMD[:], " ")})
+	}
+
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Name", "Status", "PID", "CMD"})
+
+	for _, v := range data {
+		table.Append(v)
+	}
+
+	table.Render()
 }

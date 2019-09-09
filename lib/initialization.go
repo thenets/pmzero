@@ -3,14 +3,23 @@ package lib
 import (
 	"log"
 	"path/filepath"
+	"strconv"
 	"strings"
+
+	proc "github.com/shirou/gopsutil/process"
 )
 
 // https://ini.unknwon.io/docs/intro/getting_started
 
 func init() {
+	UpdateState()
+}
+
+// UpdateState checks all changes and update the state file
+func UpdateState() {
 	CheckBootTime()
 	updateDeploymentsState()
+	updateProcessState()
 }
 
 func updateDeploymentsState() {
@@ -23,7 +32,7 @@ func updateDeploymentsState() {
 
 	var deploymentNames []string
 
-	var deploymentPrefix = configDirPath + "deployment_"
+	var deploymentPrefix = strings.ReplaceAll(configDirPath+"deployment_", "\\", "/")
 
 	for _, f := range files {
 		f = strings.ReplaceAll(f, "\\", "/")
@@ -44,10 +53,23 @@ func updateDeploymentsState() {
 	var keys = state.Section("deployments").Keys()
 	for _, f := range keys {
 		if !StringInSlice(f.Name(), deploymentNames) {
-			state.Section("deployments").Key(f.Name()).SetValue("false")
+			state.Section("deployments").DeleteKey(f.Name())
 		}
 	}
 
 	state.SaveTo(stateFilePath)
+}
 
+func updateProcessState() {
+	var state = GetState()
+
+	for _, p := range state.Section("processes").Keys() {
+		var pid, _ = strconv.ParseInt(p.Value(), 0, 0)
+		var pidExist, _ = proc.PidExists(int32(pid))
+		if !pidExist {
+			state.Section("processes").DeleteKey(p.Name())
+		}
+	}
+
+	state.SaveTo(stateFilePath)
 }
