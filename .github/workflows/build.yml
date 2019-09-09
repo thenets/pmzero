@@ -29,15 +29,24 @@ jobs:
         go get -v -t -d ./...
       
     - name: Build <linux>
-      run: go build -v . -o ./dist/pmzero-linux-x86_64
+      run: |
+        go build -v .
+        mkdir dist
+        mv pmzero ./dist/pmzero-linux-x86_64
       if: matrix.os == 'ubuntu-latest'
 
     - name: Build <macOS>
-      run: go build -v . -o ./dist/pmzero-darwin-x86_64
+      run: |
+        go build -v .
+        mkdir dist
+        mv pmzero ./dist/pmzero-darwin-x86_64
       if: matrix.os == 'macOS-latest'
       
     - name: Build <windows>
-      run: go build -v . -o ./dist/pmzero-windows-x86_64.exe
+      run: |
+        go build -v .
+        mkdir dist
+        mv pmzero.exe ./dist/pmzero-windows-x86_64.exe
       if: matrix.os == 'windows-latest'
 
     - name: Release - Upload binary <linux>
