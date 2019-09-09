@@ -1,13 +1,10 @@
-name: Go
-# on: 
-#   push:
-#     paths:
-#       - '*.go'
-#     branches:
-#       - master
-#     tags:        
-#       - v*
-on: [push]
+name: build
+on: 
+  push:
+    branches:
+      - master
+    tags:        
+      - v*
 
 jobs:
   build:
@@ -34,16 +31,23 @@ jobs:
     - name: Build
       run: go build -v .
       
-    - name: Upload binary <linux & macOS>
+    - name: Upload binary <linux>
       uses: actions/upload-artifact@master
       with:
-        name: pmzero
+        name: pmzero-linux-x86_64
         path: ./pmzero
-      if: matrix.os != 'windows-latest'
+      if: matrix.os == 'linux-latest'
+
+    - name: Upload binary <macOS>
+      uses: actions/upload-artifact@master
+      with:
+        name: pmzero-darwin-x86_64
+        path: ./pmzero
+      if: matrix.os == 'macOS-latest'
       
     - name: Upload binary <windows>
       uses: actions/upload-artifact@master
       with:
-        name: pmzero.exe
+        name: pmzero-windows-x86_64.exe
         path: ./pmzero.exe
       if: matrix.os == 'windows-latest'
