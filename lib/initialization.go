@@ -31,6 +31,11 @@ func createConfigDir() {
 		os.Mkdir(configDirPath, os.ModePerm)
 	}
 
+	// Create cache/logs/ dir if not exist
+	if _, err := os.Stat(configDirPath + "logs"); os.IsNotExist(err) {
+		os.Mkdir(configDirPath + "logs", os.ModePerm)
+	}
+
 	// Create state.ini if not exist
 	if _, err := os.Stat(stateFilePath); os.IsNotExist(err) {
 		emptyFile, err := os.Create(stateFilePath)

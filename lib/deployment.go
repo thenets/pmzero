@@ -138,7 +138,7 @@ func StartDeployment(deploymentName string) {
 		fmt.Println("process already running")
 	} else {
 		// Create process
-		var pid = createProcess(d.CMD[0], d.CMD[1:])
+		var pid = createProcess(d)
 		state.Section("processes").Key(d.Name).SetValue(strconv.Itoa(pid))
 		state.SaveTo(stateFilePath)
 	}

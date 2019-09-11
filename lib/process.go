@@ -10,10 +10,27 @@ import (
 )
 
 // createProcess and add it to a pull
-func createProcess(commandName string, args []string) int {
+func createProcess(deployment DeploymentData) int {
+	var commandName = deployment.CMD[0]
+	var args = deployment.CMD[1:]
+	var err error
+
+	// Set log files
+	stdoutFile, err := os.Create(configDirPath + "./logs/" + deployment.Name)
+	if err != nil {
+		panic(err)
+	}
+	defer stdoutFile.Close()
+	stderrFile, err := os.Create(configDirPath + "./logs/" + deployment.Name + ".err")
+	if err != nil {
+		panic(err)
+	}
+	defer stderrFile.Close()
+
 	cmd := exec.Command(commandName, args...)
-	cmd.Stdout = os.Stdout
-	err := cmd.Start()
+	cmd.Stdout = stdoutFile
+	cmd.Stderr = stderrFile
+	err = cmd.Start()
 	if err != nil {
 		log.Fatal(err)
 	}
