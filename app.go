@@ -123,6 +123,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	lib.UpdateState()
+
 }
 
 func listDeployments() {

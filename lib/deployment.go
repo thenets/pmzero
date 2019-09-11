@@ -63,6 +63,29 @@ func GetDeploymentByFilePath(filePath string) DeploymentData {
 	return t
 }
 
+// RefactorDeploymentFile check all content and update values based on DeploymentData struct
+func RefactorDeploymentFile(deploymentName string) {
+	var deployment = GetDeploymentByName(deploymentName)
+
+	// Recreate file based on struct
+	var filePath = configDirPath + "deployment_" + deployment.Name + ".yaml"
+	var configFileContent, err = yaml.Marshal(deployment)
+	ioutil.WriteFile(filePath, configFileContent, 0644)
+	if err != nil {
+		log.Fatalf("[ERROR] Config file can't be write: ./%v\n%v", filePath, err)
+	}
+	yaml.Marshal(deployment)
+}
+
+// RefactorAllDeploymentFile check all content and update values based on DeploymentData struct of all files
+func RefactorAllDeploymentFile() {
+	var deployments = GetDeployments()
+
+	for _, deployment := range deployments {
+		RefactorDeploymentFile(deployment.Name)
+	}
+}
+
 // AddDeploymentFile copy deployment file to config dir and validates.
 // Returns error message if file doesn't exist or is invalid.
 func AddDeploymentFile(filePath string) error {
@@ -89,7 +112,10 @@ func AddDeploymentFile(filePath string) error {
 
 	// Copy deployment file to config dir
 	CopyFile(filePath, newDeploymentFilePath)
-	
+
+	// Refactor deployment file
+	RefactorDeploymentFile(d.Name)
+
 	return nil
 }
 
@@ -199,5 +225,7 @@ func ForegroundDeployments() {
 				StartDeployment(d.Name)
 			}
 		}
+
+		RefactorAllDeploymentFile()
 	}
 }

@@ -11,8 +11,6 @@ import (
 	proc "github.com/shirou/gopsutil/process"
 )
 
-// https://ini.unknwon.io/docs/intro/getting_started
-
 func init() {
 	createConfigDir()
 	UpdateState()
@@ -23,6 +21,7 @@ func UpdateState() {
 	CheckBootTime()
 	updateDeploymentsState()
 	updateProcessState()
+	RefactorAllDeploymentFile()
 }
 
 func createConfigDir() {
