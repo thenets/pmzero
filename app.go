@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// Special condition for "run" command
-	// cause it can conflit with the command args.
+	// cause it can conflict with the command args.
 	// if len(os.Args) > 1 {
 	// 	if os.Args[1] == "run" {
 	// 		lib.createProcess(os.Args[2], os.Args[3:])
