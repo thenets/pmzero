@@ -107,6 +107,22 @@ func main() {
 			},
 		},
 		{
+			Name:  "logs",
+			Usage: "follow the logs files from a deployment",
+			Action: func(c *cli.Context) error {
+				if len(c.Args().First()) == 0 {
+					log.Fatalf("[ERROR] require a deployment name.\nExample: %v logs <deploymentName>\n", app.Name)
+				}
+				if lib.HasDeployment(c.Args().First()) {
+					lib.TailDeployment(c.Args().First())
+				} else {
+					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
+				}
+
+				return nil
+			},
+		},
+		{
 			Name:  "foreground",
 			Usage: "keep running and respawn all deployments",
 			Action: func(c *cli.Context) error {

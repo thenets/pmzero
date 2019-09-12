@@ -11,6 +11,7 @@ import (
 	"strconv"
 
 	"gopkg.in/yaml.v2"
+	"github.com/hpcloud/tail"
 )
 
 // DeploymentData configs from YAML file
@@ -117,6 +118,20 @@ func AddDeploymentFile(filePath string) error {
 	RefactorDeploymentFile(d.Name)
 
 	return nil
+}
+
+
+// TailDeployment is equivalent to "tail -f" for all deployment output
+func TailDeployment(deploymentName string) {
+	var deployment = GetDeploymentByName(deploymentName)
+
+	t, err := tail.TailFile(configDirPath + "./logs/" + deployment.Name, tail.Config{Follow: true})
+	if err != nil {
+		log.Fatalf("[ERROR] Can't read the logs file.\n%v", err)
+	}
+	for line := range t.Lines {
+		fmt.Println(line.Text)
+	}
 }
 
 // GetDeploymentByName search the deployment by name and returns

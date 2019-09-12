@@ -21,7 +21,7 @@ func createProcess(deployment DeploymentData) int {
 		panic(err)
 	}
 	defer stdoutFile.Close()
-	stderrFile, err := os.Create(configDirPath + "./logs/" + deployment.Name + ".err")
+	stderrFile, err := os.Create(configDirPath + "./logs/" + deployment.Name)
 	if err != nil {
 		panic(err)
 	}
