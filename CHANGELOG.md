@@ -2,7 +2,8 @@
 
 ## [v0.0.2-alpha]
 ### Added
-- 2019-09-10 : Support to external log file for stdout and stderr.
+- 2019-09-12 : Added "logs" command. Equivalent to "tail -f"
+- 2019-09-10 : Support to external log file for stdout and stderr
 - 2019-09-10 : This CHANGELOG.md file was created
 - 2019-09-10 : GoDoc badge
 - 2019-09-10 : Go Report Card badge
