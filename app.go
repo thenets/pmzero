@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -10,6 +9,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	lib "github.com/thenets/pmzero/lib"
 	"github.com/urfave/cli"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -25,8 +25,8 @@ func main() {
 	// CLI
 	app := cli.NewApp()
 	app.Name = "pmzero"
-	app.Usage = "Windows and Linux process manager."
-	app.Version = "0.0.1-alpha"
+	app.Usage = "Easiest multi-platform process manager"
+	app.Version = "0.0.2-alpha"
 	app.Commands = []cli.Command{
 		{
 			Name:    "load",
