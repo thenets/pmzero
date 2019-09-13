@@ -25,7 +25,8 @@ curl -sSL https://raw.githubusercontent.com/thenets/pmzero/master/docs/install-l
 ## Docs
 
 ```
-NAME:                                                                                                                                                              pmzero - Easiest multi-platform process manager
+NAME:
+   pmzero - Easiest multi-platform process manager
 
 USAGE:
    pmzero.exe [global options] command [command options] [arguments...]

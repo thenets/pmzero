@@ -26,7 +26,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "pmzero"
 	app.Usage = "Easiest multi-platform process manager"
-	app.Version = "0.0.2-alpha"
+	app.Version = "0.0.3-alpha"
 	app.Commands = []cli.Command{
 		{
 			Name:    "load",

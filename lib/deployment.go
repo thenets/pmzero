@@ -21,6 +21,7 @@ type DeploymentData struct {
 	Type   string   `yaml:"type"`
 	Name   string   `yaml:"name"`
 	CMD    []string `yaml:"cmd"`
+	env    []string
 	PID    int
 	Status string
 	CPU    struct {
