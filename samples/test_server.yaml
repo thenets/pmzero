@@ -2,7 +2,8 @@ type: deployment
 name: test
 cmd: ["test", "asgard2"]
 env:
-    - ASPNETCORE_ENVIRONMENT=LocalIIS
+    - name: ASPNETCORE_ENVIRONMENT
+      value: LocalIIS
 cpu:
     limit: 50
 linux:
