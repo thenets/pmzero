@@ -1,6 +1,6 @@
 type: deployment
 name: test
-cmd: ["test", "asgard2"]
+cmd: ["/home/luiz/go/bin/test", "asgard2"]
 env:
     - name: ASPNETCORE_ENVIRONMENT
       value: LocalIIS

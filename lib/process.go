@@ -27,9 +27,16 @@ func createProcess(deployment DeploymentData) int {
 	}
 	defer stderrFile.Close()
 
+	// Convert env data
+	var envs []string
+	for _, e := range deployment.Env{
+		envs = append(envs, e.Name+"="+e.Value)
+	}
+
 	cmd := exec.Command(commandName, args...)
 	cmd.Stdout = stdoutFile
 	cmd.Stderr = stderrFile
+	cmd.Env = envs
 	err = cmd.Start()
 	if err != nil {
 		log.Fatal(err)
