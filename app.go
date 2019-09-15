@@ -99,6 +99,23 @@ func main() {
 				}
 				if lib.HasDeployment(c.Args().First()) {
 					lib.StopDeployment(c.Args().First())
+					lib.StartDeployment(c.Args().First())
+				} else {
+					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
+				}
+
+				return nil
+			},
+		},
+		{
+			Name:  "restart",
+			Usage: "restart a deployment",
+			Action: func(c *cli.Context) error {
+				if len(c.Args().First()) == 0 {
+					log.Fatalf("[ERROR] require a deployment name.\nExample: %v restart <deploymentName>\n", app.Name)
+				}
+				if lib.HasDeployment(c.Args().First()) {
+					lib.StopDeployment(c.Args().First())
 				} else {
 					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
 				}

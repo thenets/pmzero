@@ -2,6 +2,7 @@
 
 ## [v0.0.3-alpha]
 ### Added
+- 2019-09-14 : Restart command
 ### Changed
 ### Deprecated
 ### Removed
