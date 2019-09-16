@@ -41,6 +41,7 @@ func createProcess(deployment DeploymentData) int {
 	cmd := exec.Command(commandName, args...)
 	cmd.Stdout = stdoutFile
 	cmd.Stderr = stderrFile
+	cmd.Dir = deployment.Workdir
 	cmd.Env = envs
 	err = cmd.Start()
 	if err != nil {

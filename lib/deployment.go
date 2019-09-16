@@ -18,11 +18,12 @@ import (
 
 // DeploymentData configs from YAML file
 type DeploymentData struct {
-	Type   string   `yaml:"type"`
-	Name   string   `yaml:"name"`
-	CMD    []string `yaml:"cmd"`
-	Env    []struct {
-		Name string
+	Type    string   `yaml:"type"`
+	Name    string   `yaml:"name"`
+	CMD     []string `yaml:"cmd"`
+	Workdir string
+	Env     []struct {
+		Name  string
 		Value string
 	}
 	PID    int
@@ -134,7 +135,7 @@ func TailDeployment(deploymentName string) {
 		// Windows
 		fmt.Println("You are running on Windows")
 
-		cmd := exec.Command("powershell", "-c", "Get-Content", "-Path", "\"" + configDirPath+"./logs/"+deployment.Name + "\"", "-Wait")
+		cmd := exec.Command("powershell", "-c", "Get-Content", "-Path", "\""+configDirPath+"./logs/"+deployment.Name+"\"", "-Wait")
 		cmd.Stderr = os.Stdout
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
