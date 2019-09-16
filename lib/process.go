@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 
 	proc "github.com/shirou/gopsutil/process"
 )
@@ -28,11 +29,15 @@ func createProcess(deployment DeploymentData) int {
 	defer stderrFile.Close()
 
 	// Convert env data
-	var envs []string
-	for _, e := range deployment.Env{
+	var envs = os.Environ()
+	for _, e := range deployment.Env {
 		envs = append(envs, e.Name+"="+e.Value)
-	}
 
+		// If Windows, set OS env
+		if runtime.GOOS == "windows" {
+			os.Setenv(e.Name, e.Value)
+		}
+	}
 	cmd := exec.Command(commandName, args...)
 	cmd.Stdout = stdoutFile
 	cmd.Stderr = stderrFile
