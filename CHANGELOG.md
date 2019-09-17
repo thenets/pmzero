@@ -2,8 +2,10 @@
 
 ## [v0.0.3-alpha]
 ### Added
+- 2019-09-16 : Support to custom workdir from deployment file
 - 2019-09-14 : Restart command
 ### Changed
+- 2019-09-16 : Now the system envs are loaded with command envs
 ### Deprecated
 ### Removed
 ### Fixed
