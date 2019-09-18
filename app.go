@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
+	log "github.com/sirupsen/logrus"
 	lib "github.com/thenets/pmzero/lib"
 	"github.com/urfave/cli"
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -38,12 +39,8 @@ func main() {
 				}
 
 				// Load deployment file if it's a deployment type
-				var data = lib.GetDeploymentByFilePath(c.Args().First())
-				if data.Type == "deployment" {
-					lib.AddDeploymentFile(c.Args().First())
-				} else {
-					log.Fatalf("[ERROR] config file type not supported: %v\n", data.Type)
-				}
+				var configFilePath, _ = filepath.Abs(c.Args().First())
+				lib.LoadConfigFiles(configFilePath)
 
 				return nil
 			},

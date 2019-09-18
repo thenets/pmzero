@@ -12,7 +12,7 @@
             "mode": "auto",
             "program": "${workspaceFolder}/app.go",
             "env": {},
-            "args": ["load", "samples/test_server.yaml"]
+            "args": ["load", "samples/"]
         }
     ]
 }

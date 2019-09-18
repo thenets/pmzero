@@ -94,12 +94,13 @@ func RefactorAllDeploymentFile() {
 	}
 }
 
-// AddDeploymentFile copy deployment file to config dir and validates.
+// LoadDeploymentFile copy deployment file to config dir and validates.
 // Returns error message if file doesn't exist or is invalid.
-func AddDeploymentFile(filePath string) error {
+func LoadDeploymentFile(filePath string) error {
+	var err error
 
 	// Validates deployment file
-	var err = validateDeploymentFile(filePath)
+	err = validateDeploymentFile(filePath)
 	if err != nil {
 		log.Fatalf("[ERROR] Invalid config file.\n%v", err)
 	}
@@ -116,6 +117,8 @@ func AddDeploymentFile(filePath string) error {
 		if err != nil {
 			log.Fatalln(err)
 		}
+	} else {
+		fmt.Printf("deployment '%s' Adding...\n", d.Name)
 	}
 
 	// Copy deployment file to config dir
