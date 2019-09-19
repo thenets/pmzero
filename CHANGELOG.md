@@ -7,6 +7,7 @@
 - 2019-09-14 : Support to custom env per deployment
 - 2019-09-14 : Restart command
 ### Changed
+- 2019-09-19 : Using native command to tail log on Linux and Mac
 - 2019-09-16 : Now the system envs are loaded with command envs
 ### Deprecated
 ### Removed

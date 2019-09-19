@@ -12,7 +12,6 @@ import (
 
 	"strconv"
 
-	"github.com/hpcloud/tail"
 	"gopkg.in/yaml.v2"
 )
 
@@ -136,8 +135,7 @@ func TailDeployment(deploymentName string) {
 
 	if runtime.GOOS == "windows" {
 		// Windows
-		fmt.Println("You are running on Windows")
-
+		// fmt.Println("You are running on Windows")
 		cmd := exec.Command("powershell", "-c", "Get-Content", "-Path", "\""+configDirPath+"./logs/"+deployment.Name+"\"", "-Wait")
 		cmd.Stderr = os.Stdout
 		cmd.Stdout = os.Stdout
@@ -146,14 +144,13 @@ func TailDeployment(deploymentName string) {
 		}
 	} else {
 		// Linux of MacOS
-		t, err := tail.TailFile(configDirPath+"./logs/"+deployment.Name, tail.Config{Follow: true})
-		if err != nil {
-			log.Fatalf("[ERROR] Can't read the logs file.\n%v", err)
+		cmd := exec.Command("tail", "-f", configDirPath+"./logs/"+deployment.Name)
+		cmd.Stderr = os.Stdout
+		cmd.Stdout = os.Stdout
+		if err := cmd.Run(); err != nil {
+			fmt.Println("[ERROR] ", err)
 		}
-		for line := range t.Lines {
-			fmt.Println(line.Text)
-		}
-
+		cmd.Wait()
 	}
 
 }
