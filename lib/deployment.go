@@ -142,6 +142,7 @@ func TailDeployment(deploymentName string) {
 		if err := cmd.Run(); err != nil {
 			fmt.Println("[ERROR] ", err)
 		}
+		
 	} else {
 		// Linux of MacOS
 		cmd := exec.Command("tail", "-f", configDirPath+"./logs/"+deployment.Name)
