@@ -122,13 +122,28 @@ func main() {
 		},
 		{
 			Name:  "logs",
-			Usage: "follow the logs files from a deployment",
+			Usage: "follow the logs files from a deploymentFile",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "tail, t",
+					Usage: "Returns the `N` latest lines from log file.",
+					Value: "20",
+				},
+				cli.BoolFlag{
+					Name:  "follow, f",
+					Usage: "Keep showing lines until Ctrl+C.",
+				},
+			},
 			Action: func(c *cli.Context) error {
 				if len(c.Args().First()) == 0 {
 					log.Fatalf("[ERROR] require a deployment name.\nExample: %v logs <deploymentName>\n", app.Name)
 				}
 				if lib.HasDeployment(c.Args().First()) {
-					lib.TailDeployment(c.Args().First())
+					tailLines, err := strconv.ParseInt(c.String("tail"), 0, 0)
+					if err != nil {
+						log.Fatalf("[ERROR] --tail argument must be an integer.")
+					}
+					lib.TailDeployment(c.Args().First(), int(tailLines), c.Bool("follow"))
 				} else {
 					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
 				}
@@ -154,7 +169,6 @@ func main() {
 	}
 
 	lib.UpdateState()
-
 }
 
 func listDeployments() {

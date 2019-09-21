@@ -130,13 +130,17 @@ func LoadDeploymentFile(filePath string) error {
 }
 
 // TailDeployment is equivalent to "tail -f" for all deployment output
-func TailDeployment(deploymentName string) {
+func TailDeployment(deploymentName string, tailSize int, isFollowing bool) {
 	var deployment = GetDeploymentByName(deploymentName)
+	var params []string
 
 	if runtime.GOOS == "windows" {
 		// Windows
-		// fmt.Println("You are running on Windows")
-		cmd := exec.Command("powershell", "-c", "Get-Content", "-Path", "\""+configDirPath+"./logs/"+deployment.Name+"\"", "-Wait")
+		params = append(params, "-c", "Get-Content", "-Tail", strconv.Itoa(tailSize), "-Path", "\""+configDirPath+"./logs/"+deployment.Name+"\"")
+		if isFollowing {
+			params = append(params, "-Wait")
+		}
+		cmd := exec.Command("powershell", params...)
 		cmd.Stderr = os.Stdout
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
@@ -144,7 +148,11 @@ func TailDeployment(deploymentName string) {
 		}
 	} else {
 		// Linux of MacOS
-		cmd := exec.Command("tail", "-f", configDirPath+"./logs/"+deployment.Name)
+		params = append(params, "-n", strconv.Itoa(tailSize), configDirPath+"./logs/"+deployment.Name)
+		if isFollowing {
+			params = append(params, "-f")
+		}
+		cmd := exec.Command("tail", params...)
 		cmd.Stderr = os.Stdout
 		cmd.Stdout = os.Stdout
 		if err := cmd.Run(); err != nil {
