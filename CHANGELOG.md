@@ -2,6 +2,7 @@
 
 ## [v0.0.3-alpha]
 ### Added
+- 2019-09-21 : #10 Logs flags for following and tail
 - 2019-09-18 : Allow load an entire dir of config files
 - 2019-09-16 : Support to custom workdir from deployment file
 - 2019-09-14 : Support to custom env per deployment
