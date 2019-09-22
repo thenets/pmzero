@@ -34,8 +34,9 @@ func checkLinuxPrivilegies() {
 		log.Fatalln("[ERROR] This program must be run as root! (sudo)")
 	}
 }
-func enableLinuxService() {
 
+func enableLinuxService() {
+	// TODO
 }
 
 func copyLinuxServiceFile() {
@@ -72,7 +73,6 @@ func copyLinuxServiceFile() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 
 }
 

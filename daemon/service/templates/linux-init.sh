@@ -8,7 +8,7 @@
 # config: /etc/pmzero/envs
 # pidfile: /var/run/pmzero.pid
 
-SCRIPT="/usr/bin/pmzero foreground"
+SCRIPT="/usr/bin/pmzero daemon"
 RUNAS=root
 
 PIDFILE=/var/run/pmzero.pid

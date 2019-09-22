@@ -21,3 +21,5 @@ $SUDO_PREFIX rm -f /usr/bin/pmzero
 $SUDO_PREFIX curl -o /usr/bin/pmzero -L https://github.com/${PMZERO_REPO}/releases/download/${LATEST_TAG_NAME}/pmzero-linux-x86_64
 
 $SUDO_PREFIX chmod +x /usr/bin/pmzero
+
+$SUDO_PREFIX /usr/bin/pmzero setup
