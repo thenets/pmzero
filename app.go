@@ -97,7 +97,6 @@ func main() {
 				}
 				if lib.HasDeployment(c.Args().First()) {
 					lib.StopDeployment(c.Args().First())
-					lib.StartDeployment(c.Args().First())
 				} else {
 					log.Fatalf("[ERROR] deployment '%s' not found", c.Args().First())
 				}
@@ -167,7 +166,7 @@ func main() {
 			Usage: "runs in daemon mode",
 			Hidden: true,
 			Action: func(c *cli.Context) error {
-				lib.Daemon()
+				lib.ForegroundDeployments()
 
 				return nil
 			},

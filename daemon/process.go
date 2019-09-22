@@ -18,16 +18,15 @@ func createProcess(deployment DeploymentData) int {
 	var args = deployment.CMD[1:]
 	var err error
 
-	// Make sure the process logs files exist
-	
+	// TODO Make sure the process logs files exist
 
 	// Set log files
-	stdoutFile, err := os.Create(configDirPath + "./logs/" + deployment.Name)
+	stdoutFile, err := os.Create(dataDirPath + "./logs/" + deployment.Name)
 	if err != nil {
 		panic(err)
 	}
 	defer stdoutFile.Close()
-	stderrFile, err := os.Create(configDirPath + "./logs/" + deployment.Name)
+	stderrFile, err := os.Create(dataDirPath + "./logs/" + deployment.Name)
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +60,7 @@ func createProcess(deployment DeploymentData) int {
 }
 
 func appendExitCode(exitCode int, deployment DeploymentData) {
-	AppendToFile(configDirPath+"./logs/"+deployment.Name, "Exited "+strconv.Itoa(exitCode))
+	AppendToFile(dataDirPath+"./logs/"+deployment.Name, "Exited "+strconv.Itoa(exitCode))
 }
 
 // AppendToFile appends "text" to the file

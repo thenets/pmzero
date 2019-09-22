@@ -136,7 +136,7 @@ func TailDeployment(deploymentName string, tailSize int, isFollowing bool) {
 
 	if runtime.GOOS == "windows" {
 		// Windows
-		params = append(params, "-c", "Get-Content", "-Tail", strconv.Itoa(tailSize), "-Path", "\""+configDirPath+"./logs/"+deployment.Name+"\"")
+		params = append(params, "-c", "Get-Content", "-Tail", strconv.Itoa(tailSize), "-Path", "\""+dataDirPath+"./logs/"+deployment.Name+"\"")
 		if isFollowing {
 			params = append(params, "-Wait")
 		}
@@ -149,7 +149,7 @@ func TailDeployment(deploymentName string, tailSize int, isFollowing bool) {
 		
 	} else {
 		// Linux of MacOS
-		params = append(params, "-n", strconv.Itoa(tailSize), configDirPath+"./logs/"+deployment.Name)
+		params = append(params, "-n", strconv.Itoa(tailSize), dataDirPath+"./logs/"+deployment.Name)
 		if isFollowing {
 			params = append(params, "-f")
 		}

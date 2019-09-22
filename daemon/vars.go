@@ -7,14 +7,31 @@ import (
 )
 
 var configDirPath = getConfigDirPath()
-var stateFilePath = configDirPath + "state.ini"
+var dataDirPath = getDataDirPath()
+var stateFilePath = getDataDirPath() + "state.ini"
+
+func getDataDirPath() string {
+	if runtime.GOOS == "linux" {
+		return "/var/lib/pmzero/"
+	} else if runtime.GOOS == "windows" {
+		return getUserDir() + "/.pmzero/"
+	} else {
+		log.Fatal("[ERROR] Operational system not supported")
+	}
+
+	return ""
+}
 
 func getConfigDirPath() string {
 	if runtime.GOOS == "linux" {
 		return "/etc/pmzero/"
-	} else {
+	} else if runtime.GOOS == "windows" {
 		return getUserDir() + "/.pmzero/"
+	} else {
+		log.Fatal("[ERROR] Operational system not supported")
 	}
+
+	return ""
 }
 
 func getUserDir() string {

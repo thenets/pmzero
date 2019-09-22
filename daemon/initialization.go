@@ -32,7 +32,7 @@ func createConfigDir() {
 
 	// Create cache/logs/ dir if not exist
 	if _, err := os.Stat(configDirPath + "logs"); os.IsNotExist(err) {
-		os.Mkdir(configDirPath + "logs", os.ModePerm)
+		os.Mkdir(dataDirPath+"logs", os.ModePerm)
 	}
 
 	// Create state.ini if not exist
@@ -98,7 +98,10 @@ func updateProcessState() {
 
 	for _, p := range state.Section("processes").Keys() {
 		var pid, _ = strconv.ParseInt(p.Value(), 0, 0)
-		var pidExist, _ = proc.PidExists(int32(pid))
+		var pidExist, err = proc.PidExists(int32(pid))
+		if err != nil {
+			panic(err)
+		}
 		if !pidExist {
 			state.Section("processes").DeleteKey(p.Name())
 		}
