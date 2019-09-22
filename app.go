@@ -10,6 +10,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
 	lib "github.com/thenets/pmzero/lib"
+	"github.com/thenets/pmzero/lib/service"
 	"github.com/urfave/cli"
 )
 
@@ -157,6 +158,26 @@ func main() {
 			Action: func(c *cli.Context) error {
 				fmt.Printf("Press Ctrl+C to end\n")
 				lib.ForegroundDeployments()
+
+				return nil
+			},
+		},
+		{
+			Name:  "daemon",
+			Usage: "runs in daemon mode",
+			Hidden: true,
+			Action: func(c *cli.Context) error {
+				lib.Daemon()
+
+				return nil
+			},
+		},
+		{
+			Name:  "setup",
+			Usage: "setup and fix the pmzero installation",
+			Hidden: true,
+			Action: func(c *cli.Context) error {
+				service.SetupService()
 
 				return nil
 			},

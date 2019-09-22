@@ -12,7 +12,7 @@
             "mode": "auto",
             "program": "${workspaceFolder}/app.go",
             "env": {},
-            "args": ["logs", "-f", "test"]
+            "args": ["setup"]
         }
     ]
 }
