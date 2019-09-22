@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 	"os"
+	"os/exec"
 	"os/user"
 	"runtime"
 
@@ -15,6 +16,8 @@ func SetupService() {
 		log.Println("Platform: Linux")
 		checkLinuxPrivilegies()
 		log.Println("Has root privilegies")
+		createLinuxUser()
+		log.Println("Created 'pmzero' user")
 		copyLinuxServiceFile()
 		log.Println("Service file copied")
 		enableLinuxService()
@@ -32,6 +35,19 @@ func checkLinuxPrivilegies() {
 
 	if user.Uid != "0" {
 		log.Fatalln("[ERROR] This program must be run as root! (sudo)")
+	}
+}
+
+func createLinuxUser() {
+	_, err := user.Lookup("pmzero")
+	if err != nil {
+		cmd := exec.Command("adduser", "--disabled-password", "--gecos", "", "--home", "/var/lib/pmzero", "-u", "6300", "pmzero")
+		// cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stdout
+		errCmd := cmd.Start()
+		if errCmd != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
