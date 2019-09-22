@@ -146,6 +146,7 @@ func TailDeployment(deploymentName string, tailSize int, isFollowing bool) {
 		if err := cmd.Run(); err != nil {
 			fmt.Println("[ERROR] ", err)
 		}
+		
 	} else {
 		// Linux of MacOS
 		params = append(params, "-n", strconv.Itoa(tailSize), configDirPath+"./logs/"+deployment.Name)
