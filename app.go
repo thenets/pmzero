@@ -9,8 +9,8 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	log "github.com/sirupsen/logrus"
-	lib "github.com/thenets/pmzero/lib"
-	"github.com/thenets/pmzero/lib/service"
+	lib "github.com/thenets/pmzero/daemon"
+	"github.com/thenets/pmzero/daemon/service"
 	"github.com/urfave/cli"
 )
 
