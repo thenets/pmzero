@@ -3,6 +3,7 @@
 [![GoDoc](https://godoc.org/github.com/thenets/pmzero?status.svg)](https://godoc.org/github.com/thenets/pmzero)
 [![Go Report Card](https://goreportcard.com/badge/github.com/thenets/pmzero)](https://goreportcard.com/report/github.com/thenets/pmzero)
 [![GitHub Actions](https://github.com/thenets/pmzero/workflows/build/badge.svg)](https://github.com/thenets/pmzero/actions)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fthenets%2Fpmzero.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fthenets%2Fpmzero?ref=badge_shield)
 
 Inspired by PM2 and a hard Amazon interview process.
 
@@ -48,3 +49,6 @@ GLOBAL OPTIONS:
    --help, -h     show help
    --version, -v  print the version
 ```
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fthenets%2Fpmzero.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fthenets%2Fpmzero?ref=badge_large)
